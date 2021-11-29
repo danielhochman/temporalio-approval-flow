@@ -18,7 +18,7 @@ $ go run worker/worker.go
 
 # In another window
 $ cd ~/go/src/github.com/danielhochman/temporalio-approval-flow
-$ go run starter.go
+$ make backend-run
 
 # Stop docker processes
 $ cd ~/go/src/github.com/danielhochman/docker-compose
