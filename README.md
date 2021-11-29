@@ -4,6 +4,8 @@ This is a quick demo of [Temporal](https://temporal.io/) and a multiple user app
 
 To test this demo locally, start by getting Temporal running using [temporalio/docker-compose](https://github.com/temporalio/docker-compose). I've forked the repo at [danielhochman/docker-compose](https://github.com/danielhochman/docker-compose) to use a database port for Postgres that doesn't conflict with the existing Clutch database port.
 
+![Peek 2021-11-29 16-11](https://user-images.githubusercontent.com/4712430/143950930-046f1a83-6bd7-4f68-b542-fd769b023e68.gif)
+
 ### Commands
 ```bash
 $ mkdir -p ~/go/src/github.com/danielhochman
@@ -41,6 +43,6 @@ For more info on these concepts check out:
 
 ## TODO
 - [x] Implement basic approval flow with an additional notification activity.
-- [ ] Expand approval business logic (handling locks).
+- [x] Expand approval business logic (handling locks).
 - [ ] Write up details of the concepts demonstrated in this example.
 - [ ] Write unit tests. Testability is very important since uses of `interface{}` throughout the Temporal SDK mean that the compiler won't catch a lot of issues.
