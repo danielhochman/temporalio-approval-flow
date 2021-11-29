@@ -6,4 +6,4 @@ frontend-build:
 
 .PHONY: backend-run
 backend-run: frontend-build
-	go run starter.go
+	go run api.go

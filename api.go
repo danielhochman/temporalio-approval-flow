@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/danielhochman/temporalio-approval-flow/workflow"
+	"go.temporal.io/api/filter/v1"
 	"io"
 	"net/http"
 	"time"
@@ -75,7 +76,9 @@ type ListOpenWorkflowResponse struct {
 }
 
 func (s *Server) ListOpenWorkflow(w http.ResponseWriter, r *http.Request) {
-	res, err := s.client.ListOpenWorkflow(r.Context(), &workflowservice.ListOpenWorkflowExecutionsRequest{})
+	res, err := s.client.ListOpenWorkflow(r.Context(), &workflowservice.ListOpenWorkflowExecutionsRequest{Filters: &workflowservice.ListOpenWorkflowExecutionsRequest_TypeFilter{
+		TypeFilter: &filter.WorkflowTypeFilter{Name: workflow.WorkflowName},
+	}})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -148,7 +151,7 @@ func (s *Server) ExecuteWorkflow(w http.ResponseWriter, r *http.Request) {
 	}
 
 	opts := temporalclient.StartWorkflowOptions{TaskQueue: workflow.QueueName}
-	we, err := s.client.ExecuteWorkflow(r.Context(), opts, workflow.Workflow, state)
+	we, err := s.client.ExecuteWorkflow(r.Context(), opts, workflow.WorkflowName, state)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

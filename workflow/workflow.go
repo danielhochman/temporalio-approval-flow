@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+const WorkflowName = "twoPhaseApproval"
 const QueueName = "twoPhaseApproval"
 const ReviewChannel = "twoPhaseApprovalReviewChannel"
 const NotificationChannel = "twoPhaseApprovalNotificationChannel"
