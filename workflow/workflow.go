@@ -7,7 +7,7 @@ import (
 )
 
 const QueueName = "twoPhaseApproval"
-const CommentChannel = "twoPhaseApprovalCommentChannel"
+const ReviewChannel = "twoPhaseApprovalReviewChannel"
 const NotificationChannel = "twoPhaseApprovalNotificationChannel"
 
 type Status int64
@@ -17,27 +17,61 @@ const (
 	Approve
 	Lock
 	Unlock
+	Comment
 )
 
-type Comment struct {
+func (s Status) String() string {
+	switch s {
+	case Approve:
+		return "approve"
+	case Lock:
+		return "lock"
+	case Unlock:
+		return "unlock"
+	case Comment:
+		return "comment"
+	default:
+		return "unspecified"
+	}
+}
+
+type Review struct {
 	Timestamp time.Time
-	Author string
-	Message string
-	Status Status
+	Author    string
+	Message   string
+	Status    Status
 }
 
 type State struct {
-	Action string
-	Comments []*Comment
+	User    string
+	Action  string
+	Reviews []*Review
 }
 
 type Notification struct {
 	User string
 }
 
+func (s *State) IsLocked() bool {
+	locked := false
+	for _, review := range s.Reviews {
+		if review.Status == Lock {
+			locked = true
+		} else if review.Status == Unlock {
+			locked = false
+		}
+	}
+	return locked
+}
+
 func (s *State) IsApproved() bool {
-	for _, comment := range s.Comments {
-		if comment.Status == Approve {
+	locked := false
+	for _, review := range s.Reviews {
+		if review.Status == Lock {
+			locked = true
+		} else if review.Status == Unlock {
+			locked = false
+		} else if !locked && review.Status == Approve{
 			return true
 		}
 	}
@@ -54,7 +88,7 @@ func Workflow(ctx workflow.Context, state *State) error {
 
 	notifChan := workflow.GetSignalChannel(ctx, NotificationChannel)
 
-	ch := workflow.GetSignalChannel(ctx, CommentChannel)
+	ch := workflow.GetSignalChannel(ctx, ReviewChannel)
 	for {
 		selector := workflow.NewSelector(ctx)
 
@@ -68,10 +102,10 @@ func Workflow(ctx workflow.Context, state *State) error {
 		})
 
 		selector.AddReceive(ch, func(c workflow.ReceiveChannel, _ bool) {
-			var signal Comment
+			var signal Review
 			c.Receive(ctx, &signal)
 
-			state.Comments = append(state.Comments, &signal)
+			state.Reviews = append(state.Reviews, &signal)
 		})
 
 		selector.Select(ctx)

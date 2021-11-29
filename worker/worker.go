@@ -3,12 +3,12 @@ package main
 import (
 	"github.com/danielhochman/temporalio-approval-flow/activities"
 	"github.com/danielhochman/temporalio-approval-flow/workflow"
-	"go.temporal.io/sdk/client"
+	temporalclient "go.temporal.io/sdk/client"
 	"go.temporal.io/sdk/worker"
 )
 
 func main() {
-	c, err := client.NewClient(client.Options{})
+	c, err := temporalclient.NewClient(temporalclient.Options{})
 	if err != nil {
 		panic(err)
 	}
