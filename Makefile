@@ -7,3 +7,7 @@ frontend-build:
 .PHONY: backend-run
 backend-run: frontend-build
 	go run api.go
+
+.PHONY: worker-run
+worker-run:
+	go run worker/worker.go

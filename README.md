@@ -14,7 +14,7 @@ $ cd docker-compose
 $ docker-compose up -d
 $ cd ..
 $ cd temporalio-approval-flow
-$ go run worker/worker.go
+$ make worker-run
 
 # In another window
 $ cd ~/go/src/github.com/danielhochman/temporalio-approval-flow
@@ -23,32 +23,8 @@ $ make backend-run
 # Stop docker processes
 $ cd ~/go/src/github.com/danielhochman/docker-compose
 $ docker-compose down
-```
 
-### Example Output
-```bash
-# worker/worker.go
-2021/11/15 12:29:47 INFO  No logger configured for temporal client. Created default one.
-2021/11/15 12:29:47 INFO  Started Worker Namespace default TaskQueue twoPhaseApproval WorkerID 927986@d594@
-2021/11/15 12:30:24 DEBUG ExecuteActivity Namespace default TaskQueue twoPhaseApproval WorkerID 927986@d594@ WorkflowType Workflow WorkflowID 36672567-064a-4973-bbc6-08b17c814a93 RunID cc96fb15-96ce-4ba7-b82e-0e5f22f6a85d Attempt 1 ActivityID 9 ActivityType SendSlackNotification
-2021/11/15 12:30:24 INFO  Notifying 'jogan' of request to 'Terminate instance i-123456789abcdef0' Namespace default TaskQueue twoPhaseApproval WorkerID 927986@d594@ ActivityID 9 ActivityType SendSlackNotification Attempt 1 WorkflowType Workflow WorkflowID 36672567-064a-4973-bbc6-08b17c814a93 RunID cc96fb15-96ce-4ba7-b82e-0e5f22f6a85d
-
-# starter.go
-2021-11-15T12:30:20.117-0600    INFO    temporalio-approval-flow/starter.go:35  start   {"workflowID": "36672567-064a-4973-bbc6-08b17c814a93"}
-2021-11-15T12:30:20.126-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:21.135-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:22.142-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:23.150-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:24.158-0600    INFO    temporalio-approval-flow/starter.go:55  we have been waiting too long, notify someone!
-2021-11-15T12:30:24.173-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:25.181-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:26.188-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:27.196-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:28.203-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:29.211-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": false}
-2021-11-15T12:30:30.117-0600    INFO    temporalio-approval-flow/starter.go:79  approver approving via signal!
-2021-11-15T12:30:30.222-0600    INFO    temporalio-approval-flow/starter.go:62  polling...      {"approved": true}
-2021-11-15T12:30:30.222-0600    INFO    temporalio-approval-flow/starter.go:91  workflow completed
+# Visit localhost:9000 for the application and localhost:8088 for the Temporal dashboard.
 ```
 
 ## Concepts and Terminology (TODO)
